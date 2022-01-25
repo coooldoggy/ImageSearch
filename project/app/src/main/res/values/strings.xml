@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ImageSearch</string>
-    <string name="kakao_app_key">KakaoAK 4eb5e8fbe304ddab3ff70a70d15847b2</string>
+    <string name="kakao_app_key">KakaoAK f6b4e451ce2fd2101821eb2a8ab31bf7</string>
+    <string name="common_cancel">취소</string>
 </resources>
