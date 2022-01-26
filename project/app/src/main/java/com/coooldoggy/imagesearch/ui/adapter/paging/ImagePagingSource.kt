@@ -8,7 +8,8 @@ import com.coooldoggy.imagesearch.R
 import com.coooldoggy.imagesearch.framework.model.Documents
 import com.coooldoggy.imagesearch.framework.service.ImageSearchService
 
-class ImagePagingSource(val imageSearchService: ImageSearchService, val query: String) : PagingSource<Int, Documents>(){
+class ImagePagingSource(private val imageSearchService:
+                        ImageSearchService, val query: String) : PagingSource<Int, Documents>(){
     companion object{
         private val TAG = ImagePagingSource::class.java.simpleName
     }

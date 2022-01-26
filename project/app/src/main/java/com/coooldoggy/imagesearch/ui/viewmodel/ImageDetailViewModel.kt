@@ -28,6 +28,8 @@ class ImageDetailViewModel(application: Application): AndroidViewModel(applicati
         }else{
             View.VISIBLE
         }
+        dateTime.value = responseData.value?.dateTime
+        siteName.value = responseData.value?.displaySiteName
     }
 
     val imageUrl = MutableLiveData("")
@@ -35,4 +37,6 @@ class ImageDetailViewModel(application: Application): AndroidViewModel(applicati
     val dateTimeExist = MutableLiveData<Boolean>()
     val siteNameVisibility = MutableLiveData<Int>()
     val dateTimeVisibility = MutableLiveData<Int>()
+    val dateTime = MutableLiveData("")
+    val siteName = MutableLiveData("")
 }
