@@ -11,10 +11,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.coooldoggy.imagesearch.R
 import com.coooldoggy.imagesearch.databinding.FragmentMainImageSearchBinding
 import com.coooldoggy.imagesearch.ui.viewmodel.MainSearchViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 class MainImageSearchFragment: Fragment() {
     companion object{
@@ -59,6 +62,18 @@ class MainImageSearchFragment: Fragment() {
             }
             clEditText.setOnClickListener {
                 showSoftInputMethod(it)
+            }
+
+            rvSearchList.apply {
+                adapter = viewModel.adapter
+                layoutManager = GridLayoutManager(requireContext(), 3)
+            }
+
+        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.flow.collectLatest { pagingData ->
+                viewModel.adapter.submitData(pagingData)
             }
         }
     }
