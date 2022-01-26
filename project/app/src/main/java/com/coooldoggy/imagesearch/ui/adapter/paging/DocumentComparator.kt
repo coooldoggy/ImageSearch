@@ -5,7 +5,7 @@ import com.coooldoggy.imagesearch.framework.model.Documents
 
 object DocumentComparator: DiffUtil.ItemCallback<Documents>() {
     override fun areItemsTheSame(oldItem: Documents, newItem: Documents): Boolean {
-        return oldItem.imageUrl == newItem.imageUrl
+        return oldItem.docUrl == newItem.docUrl
     }
 
     override fun areContentsTheSame(oldItem: Documents, newItem: Documents): Boolean {

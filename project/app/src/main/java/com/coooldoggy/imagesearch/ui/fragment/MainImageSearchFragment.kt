@@ -12,12 +12,17 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.coooldoggy.imagesearch.R
 import com.coooldoggy.imagesearch.databinding.FragmentMainImageSearchBinding
+import com.coooldoggy.imagesearch.framework.model.Documents
+import com.coooldoggy.imagesearch.framework.service.ImageSearchService
+import com.coooldoggy.imagesearch.ui.adapter.ImageViewAdapter
+import com.coooldoggy.imagesearch.ui.adapter.paging.ImagePagingSource
 import com.coooldoggy.imagesearch.ui.viewmodel.MainSearchViewModel
-import kotlinx.coroutines.flow.collectLatest
 
 class MainImageSearchFragment: Fragment() {
     companion object{
@@ -34,7 +39,7 @@ class MainImageSearchFragment: Fragment() {
     ): View? {
         viewDataBinding = DataBindingUtil.inflate<FragmentMainImageSearchBinding>(inflater, R.layout.fragment_main_image_search, container, false).apply {
             model = viewModel
-            lifecycleOwner = this@MainImageSearchFragment
+            lifecycleOwner = viewLifecycleOwner
         }
         return viewDataBinding?.root
     }
@@ -65,10 +70,26 @@ class MainImageSearchFragment: Fragment() {
             }
 
             rvSearchList.apply {
-                adapter = viewModel.adapter
+                adapter = viewModel.adapter.apply {
+                    onClickImage = object : ImageViewAdapter.OnClickImage{
+                        override fun onClickImageMoveToDetail(data: Documents?) {
+                            findNavController().navigate(R.id.action_mainImageSearchFragment_to_imageDetailFragment,
+                            ImageDetailFragmentArgs(
+                                data
+                            ).toBundle())
+                        }
+                    }
+                }
                 layoutManager = GridLayoutManager(requireContext(), 3)
             }
 
+            tvCancel.setOnClickListener {
+                etSearch.setText("")
+                viewModel.queryString.value = ""
+                lifecycleScope.launchWhenCreated {
+                    viewModel.adapter.submitData(PagingData.empty())
+                }
+            }
         }
     }
 

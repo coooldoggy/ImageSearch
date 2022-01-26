@@ -2,14 +2,12 @@ package com.coooldoggy.imagesearch.ui.viewmodel
 
 import android.app.Application
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.coooldoggy.imagesearch.framework.api.ApiManager
 import com.coooldoggy.imagesearch.framework.service.ImageSearchService
 import com.coooldoggy.imagesearch.ui.adapter.ImageViewAdapter
 import com.coooldoggy.imagesearch.ui.adapter.paging.DocumentComparator
@@ -37,21 +35,24 @@ class MainSearchViewModel(application: Application): AndroidViewModel(applicatio
             }
 
             override fun onFinish() {
-                viewModelScope.launch {
-                    flow.collectLatest {
-                        adapter.submitData(it)
-                    }
-                }
+                countDownTimer = null
+                submitDataToFlow()
             }
         }
         countDownTimer?.start()
     }
 
     fun queryImage(){
+        if (queryString.value.isNullOrEmpty()) return
+        countDownTimer?.cancel()
+        submitDataToFlow()
+    }
+
+    private fun submitDataToFlow(){
         viewModelScope.launch {
-            if (queryString.value.isNullOrEmpty()) return@launch
-            countDownTimer?.cancel()
-            val result = ApiManager.queryImage(queryString.value ?: "")
+            flow.collectLatest {
+                adapter.submitData(it)
+            }
         }
     }
 }
