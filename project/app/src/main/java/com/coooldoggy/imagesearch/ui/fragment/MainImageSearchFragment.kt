@@ -70,12 +70,6 @@ class MainImageSearchFragment: Fragment() {
             }
 
         }
-
-        lifecycleScope.launchWhenCreated {
-            viewModel.flow.collectLatest { pagingData ->
-                viewModel.adapter.submitData(pagingData)
-            }
-        }
     }
 
     private fun hideSoftInputMethod(view: View?) {

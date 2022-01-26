@@ -14,6 +14,7 @@ import com.coooldoggy.imagesearch.framework.service.ImageSearchService
 import com.coooldoggy.imagesearch.ui.adapter.ImageViewAdapter
 import com.coooldoggy.imagesearch.ui.adapter.paging.DocumentComparator
 import com.coooldoggy.imagesearch.ui.adapter.paging.ImagePagingSource
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainSearchViewModel(application: Application): AndroidViewModel(application) {
@@ -36,7 +37,11 @@ class MainSearchViewModel(application: Application): AndroidViewModel(applicatio
             }
 
             override fun onFinish() {
-                queryImage()
+                viewModelScope.launch {
+                    flow.collectLatest {
+                        adapter.submitData(it)
+                    }
+                }
             }
         }
         countDownTimer?.start()
@@ -47,9 +52,6 @@ class MainSearchViewModel(application: Application): AndroidViewModel(applicatio
             if (queryString.value.isNullOrEmpty()) return@launch
             countDownTimer?.cancel()
             val result = ApiManager.queryImage(queryString.value ?: "")
-            if (result.isSuccessful){
-                Log.d(TAG, "queryImage result ${result.body()}")
-            }
         }
     }
 }

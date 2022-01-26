@@ -45,7 +45,7 @@ interface ImageSearchService {
 
         private fun provideLoggingInterceptor(): HttpLoggingInterceptor {
             val interceptor = HttpLoggingInterceptor {
-                Log.d("GithubIssueService", it)
+                Log.d("ImageSearchService", it)
             }
             interceptor.level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
