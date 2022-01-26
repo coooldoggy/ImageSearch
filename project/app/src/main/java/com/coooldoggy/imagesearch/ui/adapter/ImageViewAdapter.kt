@@ -23,7 +23,7 @@ class ImageViewAdapter(differCallback: DiffUtil.ItemCallback<Documents>): Paging
         private val binding = ItemImageBinding.bind(parent)
         fun bind(item: Documents?) {
             binding.apply {
-                //TODO
+                model = item
             }
         }
     }
