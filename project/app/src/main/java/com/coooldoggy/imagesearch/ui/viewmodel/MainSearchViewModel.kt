@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
 import com.coooldoggy.imagesearch.framework.service.ImageSearchService
 import com.coooldoggy.imagesearch.ui.adapter.ImageViewAdapter
 import com.coooldoggy.imagesearch.ui.adapter.paging.DocumentComparator
@@ -27,7 +26,7 @@ class MainSearchViewModel(application: Application): AndroidViewModel(applicatio
         PagingConfig(pageSize = 30)
     ){
         ImagePagingSource(ImageSearchService.createService(ImageSearchService::class.java), query = queryString.value ?: "")
-    }.flow.cachedIn(viewModelScope)
+    }.flow
 
     fun startTimer(){
         countDownTimer = object : CountDownTimer((1 * 1000).toLong(), 1000){
